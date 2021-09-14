@@ -105,13 +105,20 @@ class LDA:
         return likelihoods
 
     def compute_probabilities(self, x, priors):
-        # compute and output the probability of each class and the maximum probability class
-        return -1
+        x_likelihoods = self.compute_likelihoods(x)
+        lst_priors = np.array(list(priors.values()))
+        total_probability = np.sum(lst_priors * x_likelihoods)
+        print('LDA Class Posterior Probabilities:')
+        Posteriors = x_likelihoods*lst_priors / total_probability
+        for idx in range(3):
+            print(self.class_names[idx] + ': ' + str(Posteriors[idx]))
+
+        return Posteriors
 
 
-model_lda = LDA('iris_data.csv')
+model_lda = LDA(r'C:\Users\dianam\Documents\Personal\BayesianML\Mod3\iris_data.csv')
 
-Iris_setosa_observation = [5.1, 3.5, 1.4, 0.2]
+Iris_setosa_observation = [5.5, 3.1, 5, 1.5]
 model_lda.compute_likelihoods(Iris_setosa_observation)
 
 uninformative_priors = {
@@ -119,5 +126,13 @@ uninformative_priors = {
     "Iris-versicolor": 1 / 3,
     "Iris-virginica": 1 / 3
 }
-model_lda.compute_probabilities(Iris_setosa_observation, uninformative_priors)
+
+# 70% of the irises are Iris-virginica, 20% are Iris-versicolor, and 10% are Iris-setosa. 
+bagend_priors = {
+    "Iris-setosa": 0.1,
+    "Iris-versicolor": 0.2,
+    "Iris-virginica": 0.7   
+}
+
+model_lda.compute_probabilities(Iris_setosa_observation, bagend_priors)
 print(model_lda)
