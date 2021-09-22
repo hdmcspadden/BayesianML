@@ -106,8 +106,11 @@ class QDA:
         # compute and output the probability of each class and the maximum probability class
         
         x_likelihoods = self.compute_likelihoods(x)
+
         lst_priors = np.array(list(priors.values()))
+
         total_probability = np.sum(lst_priors * x_likelihoods)
+
         print('QDA Class Posterior Probabilities:')
         Posteriors = x_likelihoods*lst_priors / total_probability
         for idx in range(3):
